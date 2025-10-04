@@ -40,9 +40,16 @@ export const typeDefs = `#graphql
     favoriteColor: AllowedColor
     avatar(borderColor: AllowedColor): String
     upcomingEvents: UpcomingEvents
+    users: [User]
+  }
+  type User {
+    id: ID!
+    name: String!
+    email: String!
   }
   type Mutation {
     addBook(input: AddBookInput): Book
+    updateUserEmail(id: ID!, email: String!): User
   }
 `;
 
@@ -76,10 +83,11 @@ export const resolvers = {
           weather: {
             temperature: 25.5,
             description: "Sunny",
-          }
+          },
         },
       };
     },
+    users: () => users,
   },
   Mutation: {
     addBook: (
@@ -97,8 +105,22 @@ export const resolvers = {
       books.push(newBook);
       return newBook;
     },
+    updateUserEmail: (_: undefined, args: { id: string; email: string }) => {
+      const { id, email } = args;
+      users.forEach((user) => {
+        if (user.id === id) {
+          user.email = email;
+        }
+      });
+      return users.find((user) => user.id === id);
+    },
   },
 };
+
+const users = [
+  { id: "1", name: "Alice", email: "alice@sample.com" },
+  { id: "2", name: "Bob", email: "bob@sample.com" },
+];
 
 const books = [
   {
