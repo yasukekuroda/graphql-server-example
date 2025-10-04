@@ -11,10 +11,14 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --write ."
+    "format": "prettier --write \"src/**/*.ts\"",
+    "compile": "tsc",
+    "dev": "tsc --watch & nodemon --watch dist --ext js ./dist/server.js",
+    "start": "npm run compile && node ./dist/server.js"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",
+    "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3"
   },
