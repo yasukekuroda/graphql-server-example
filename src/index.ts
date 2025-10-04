@@ -3,6 +3,7 @@ import { ApolloServer } from "@apollo/server";
 // that together define the "shape" of queries that are executed against
 // your data.
 export const typeDefs = `#graphql
+  scalar DateTime
   type UpcomingEvents {
     name: String
     date: DateTime
@@ -37,6 +38,17 @@ export const typeDefs = `#graphql
 `;
 
 export const resolvers = {
+  DateTime: {
+    __parseValue(value: string) {
+      return new Date(value);
+    },
+    __serialize(value: Date) {
+      return value instanceof Date ? value.toISOString() : value;
+    },
+    __parseLiteral(ast: any) {
+      return ast.value;
+    },
+  },
   Query: {
     books: () => books,
     authors: () => {
@@ -49,7 +61,7 @@ export const resolvers = {
     upcomingEvents: () => {
       return {
         name: "Sample Event",
-        date: new Date().toISOString(),
+        date: new Date(),
       };
     },
   },
