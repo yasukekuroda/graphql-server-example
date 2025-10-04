@@ -47,9 +47,20 @@ export const typeDefs = `#graphql
     name: String!
     email: String!
   }
+  interface MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+  type UpdateUserEmailMutationResponseUser implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    user: User
+  }
   type Mutation {
     addBook(input: AddBookInput): Book
-    updateUserEmail(id: ID!, email: String!): User
+    updateUserEmail(id: ID!, email: String!): UpdateUserEmailMutationResponseUser
   }
 `;
 
@@ -77,7 +88,7 @@ export const resolvers = {
     upcomingEvents: () => {
       return {
         name: "Sample Event",
-        date: new Date(),
+        date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         location: {
           name: "Sample Location",
           weather: {
@@ -112,7 +123,12 @@ export const resolvers = {
           user.email = email;
         }
       });
-      return users.find((user) => user.id === id);
+      return {
+        code: "sample",
+        success: true,
+        message: "User email updated successfully",
+        user: users.find((user) => user.id === id),
+      };
     },
   },
 };
