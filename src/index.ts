@@ -4,9 +4,18 @@ import { ApolloServer } from "@apollo/server";
 // your data.
 export const typeDefs = `#graphql
   scalar DateTime
+  type Weather {
+    temperature: Float
+    description: String
+  }
+  type Location {
+    name: String
+    weather: Weather
+  }
   type UpcomingEvents {
     name: String
     date: DateTime
+    location: Location
   }
   enum AllowedColor {
     RED
@@ -62,6 +71,13 @@ export const resolvers = {
       return {
         name: "Sample Event",
         date: new Date(),
+        location: {
+          name: "Sample Location",
+          weather: {
+            temperature: 25.5,
+            description: "Sunny",
+          }
+        },
       };
     },
   },
