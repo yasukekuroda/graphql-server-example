@@ -14,6 +14,9 @@ export const typeDefs = `#graphql
     books: [Book]
     authors: [Author]
   }
+  type Mutation {
+    addBook(title: String, author: String): Book
+  }
 `;
 
 export const resolvers = {
@@ -21,6 +24,19 @@ export const resolvers = {
     books: () => books,
     authors: () => {
       return books.map((book) => book.author);
+    },
+  },
+  Mutation: {
+    addBook: (_: undefined, args: { title: string; author: string }) => {
+      const newBook = {
+        title: args.title,
+        author: {
+          name: args.author,
+          books: [],
+        },
+      };
+      books.push(newBook);
+      return newBook;
     },
   },
 };
