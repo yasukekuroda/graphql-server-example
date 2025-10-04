@@ -3,6 +3,10 @@ import { ApolloServer } from "@apollo/server";
 // that together define the "shape" of queries that are executed against
 // your data.
 export const typeDefs = `#graphql
+  type UpcomingEvents {
+    name: String
+    date: DateTime
+  }
   enum AllowedColor {
     RED
     GREEN
@@ -25,6 +29,7 @@ export const typeDefs = `#graphql
     authors: [Author]
     favoriteColor: AllowedColor
     avatar(borderColor: AllowedColor): String
+    upcomingEvents: UpcomingEvents
   }
   type Mutation {
     addBook(input: AddBookInput): Book
@@ -40,6 +45,12 @@ export const resolvers = {
     favoriteColor: () => "BLUE",
     avatar: (_: undefined, args: { borderColor: string }) => {
       return "this is sample avatar url";
+    },
+    upcomingEvents: () => {
+      return {
+        name: "Sample Event",
+        date: new Date().toISOString(),
+      };
     },
   },
   Mutation: {
