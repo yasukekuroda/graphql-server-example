@@ -12,22 +12,37 @@ export const typeDefs = `#graphql
   }
   type Query {
     books: [Book]
+    authors: [Author]
   }
 `;
 
 export const resolvers = {
   Query: {
     books: () => books,
+    authors: () => {
+      return books.map((book) => book.author);
+    },
   },
 };
 
 const books = [
   {
     title: "The Awakening",
-    author: "Kate Chopin",
+    author: {
+      name: "Kate Chopin",
+      books: [
+        { title: "title1" },
+        { title: "title2" },
+        { title: "title3" },
+        { title: "title4" },
+      ],
+    },
   },
   {
     title: "City of Glass",
-    author: "Paul Auster",
+    author: {
+      name: "Paul Auster",
+      books: [],
+    },
   },
 ];
